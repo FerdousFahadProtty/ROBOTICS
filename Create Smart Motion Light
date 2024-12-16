@@ -1,0 +1,42 @@
+/*
+
+<arduino uno r3>
+<Pir motion sensor>
+<relay:to control ac circuit by dc current>
+<ac generator to light up ac bulb>
+..........
+Like Servo, Pir & relay are centrally connected
+But unlike Servo, they dont have header file.So,
+we have to use pinMode to identify them not by name
+as it were in case of Servo.
+
+Connect signal line of PIR to a digital port and this is PIR pin.
+
+
+*/
+int relay=10,pir=7;
+
+void setup ()
+{
+Serial.begin(9600);
+  
+//pinMode activation
+
+  pinMode(relay,OUTPUT);
+  /*We will light a bulb if we sense a motion in pir.
+   To do so, we are using a relay to control ac current
+   by dc. So, here,relay will be a output pin which will
+   trigger the bulb.*/
+  
+  pinMode(pir,INPUT);
+}
+
+void loop()
+{
+  if(digitalRead(pir)==HIGH){
+ Serial.println("Motion Detected");
+  }
+  else{
+ Serial.println("NO Motion Detected");
+  }
+}
