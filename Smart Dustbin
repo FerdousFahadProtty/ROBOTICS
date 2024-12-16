@@ -1,0 +1,84 @@
+//.................................ARDUINO.................................
+/*
+Signal(trigger and echo) pins are to be connected
+in digital pin section.
+Power pins are to be connected in power pin section(i.e. 5V)
+Power wires = red
+Ground wires = black
+
+...........SERVO.............
+#include<Servo.h>
+myservo.attach(a_digital_pin);
+myservo.write(angle_to_be_rotated_through);
+digitalWrite(trig,HIGH/LOW);
+pulseIn(echo,HIGH)..<it will calculate time starting from trigger pin>..
+............x................
+
+*/
+
+
+#include<Servo.h>
+
+int findDistance (int trig,int echo);
+
+Servo myservo;//name the servo in the circuit to call it later on
+int trig=7,echo=6;
+// NOT NEEDED....int servosupply = 8;
+
+void setup () 
+{
+Serial.begin(9600);
+  pinMode(trig,OUTPUT);
+  pinMode(echo,INPUT);
+  
+ //pinMode(servosupply,OUTPUT);
+ //need not,Servo is centrally connected
+  
+  myservo.attach(8);//servo is connected to 8th pin(signal line)
+    
+}
+
+void loop () 
+{
+  Serial.println (findDistance(trig,echo));
+  if (findDistance(trig,echo)<20){
+    myservo.write(90);
+    //delay(2000);
+  }
+  else if (findDistance(trig,echo)>20){
+  myservo.write(0);
+  }
+  
+}
+
+//...Forward declaration of this function is needed
+
+int findDistance (int trig,int echo){
+ 
+//to avoid any garbage value interruption,clear the pin beforehand
+  digitalWrite(trig,LOW);
+  delayMicroseconds(2);
+  
+  //generate wave
+  digitalWrite(trig,HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig,LOW); 
+  
+  //catch the time by reading echo pin
+  int time = pulseIn(echo,HIGH);
+  
+  //Take Vsound in cm/microsecond ==0.034
+  int distanceOfobject = (0.034*(time)/2);//(in cm)
+  return distanceOfobject;
+}
+
+
+
+
+
+
+
+
+
+
+
