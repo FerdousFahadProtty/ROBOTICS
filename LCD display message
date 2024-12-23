@@ -1,0 +1,44 @@
+#include<LiquidCrystal_I2C.h>
+
+//Declare an object of lcd type
+  const int LCD_Address =0x27;
+  const int LCD_Row =2;
+  const int LCD_Col =16;
+LiquidCrystal_I2C mylcd(LCD_Address, LCD_Col, LCD_Row);
+// OR, LiquidCrystal_I2C mylcd(0x27, 16, 2);
+
+void setup ()
+{
+  /* .....lcd setup.....
+     
+     1.Lcd.init(): initialize
+     2.Lcd.clear: clear lcd display
+     3.Lcd.setCursor(0,0): where to print from 
+     4.Lcd.backlight(): For readability
+     5.Lcd.print("Hello World"): 
+  */
+  mylcd.init();
+  mylcd.clear();
+  mylcd.setCursor(0, 0);
+  mylcd.backlight();
+ 
+  mylcd.print("HELLO WORLD...!");
+  
+  delay(2500);
+  mylcd.clear();
+  mylcd.setCursor(0,0);
+}
+void loop () 
+{
+
+  mylcd.print("HELLO USER...!!!");
+  delay(2000);
+  mylcd.clear();
+  mylcd.setCursor(0,0);
+  
+  mylcd.print("ARDUINO ROCKS...!!!");
+  delay(2000);
+  mylcd.clear();
+  mylcd.setCursor(0,0);
+
+}
