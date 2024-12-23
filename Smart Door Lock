@@ -1,0 +1,120 @@
+#include<LiquidCrystal_I2C.h>
+#include<Keypad.h>
+
+ /* ...............lcd setup......................
+ 
+     [sda pin = A4;
+      scl pin = A5;]
+      
+     #include<LiquidCrystal_I2C.h>
+     LiquidCrystal_I2C mylcd(lcd adress,lcd columns,lcd rows);
+   
+     1.Lcd.init(): initialize
+     2.Lcd.clear: clear lcd display
+     3.Lcd.setCursor(0,0): where to print from 
+     4.Lcd.backlight(): For readability
+     5.Lcd.print("Enter Password"): 
+  */
+
+
+
+  const int LCD_Address =0x27;
+  const int LCD_Row =2;
+  const int LCD_Col =16;
+
+//Declare an object of lcd_I2C type
+LiquidCrystal_I2C mylcd(LCD_Address, LCD_Col, LCD_Row);
+// OR, LiquidCrystal_I2C mylcd(0x27, 16, 2);
+
+
+/*...............Keypad....................
+
+   rows,cols,keys(2D),rowpins(1D),colpins(1D)
+
+   Keypad mykeypad = Keypad(makeKeymap(keys),rowpins,colpins,
+                            rows,cols);
+
+*/
+
+const byte rows=4;
+const byte cols=4;
+ byte rowpins[]={9,8,7,6};
+ byte colpins[]={5,4,3,2};
+char keys[rows][cols]={
+                       {'1','2','3','A'},
+                       {'4','5','6','B'},
+                       {'7','8','9','C'},
+                       {'*','0','#','D'}
+                      };
+
+
+//make an object of keypad type
+Keypad mykeypad = Keypad(makeKeymap(keys),rowpins,colpins,rows,cols);
+
+
+String password="1234";
+String inputpassword="";
+int i=0;
+
+void setup ()
+{
+ 
+  mylcd.init();
+  mylcd.clear();
+  mylcd.setCursor(0, 0);
+  mylcd.backlight();
+  mylcd.print("Enter Password: ");
+  delay(1000);
+  mylcd.clear();
+  mylcd.setCursor(0,0);
+  
+ 
+}
+
+void loop ()
+{
+  //take an input key from user
+  char key =mykeypad.getKey();
+  
+ 
+  if (key){ 
+  
+    
+    if (inputpassword.length() < password.length()){
+     inputpassword+=key;
+      mylcd.setCursor(i,0);
+      mylcd.print(key);
+      //delay(200);
+      
+      mylcd.setCursor(i-1,0);
+      mylcd.print("#");
+      //delay(200);
+     
+    }
+    if(inputpassword.length()==password.length()){
+      
+          if(inputpassword==password){
+          mylcd.clear();
+          mylcd.setCursor(0,0);
+          mylcd.print("Access Granted..!");
+         
+          }
+      
+          else  {
+          mylcd.clear();
+          mylcd.setCursor(0,0);
+          mylcd.print("Access Denied..!");
+         
+      }
+       delay (2000);
+      mylcd.clear();
+     inputpassword="";
+     i=0;
+      
+    }
+     
+    i+=1;
+  }
+  
+
+}
